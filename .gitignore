@@ -1,3 +1,4 @@
 .DS_Store
 .idea
-src/sass-cache
+src/.sass-cache
+build
