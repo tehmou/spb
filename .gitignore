@@ -2,3 +2,4 @@
 .idea
 src/.sass-cache
 build
+node_modules
