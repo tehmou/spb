@@ -7,7 +7,7 @@ module.exports = function(grunt) {
     var BUILD_DIR = 'build';
     var MAIN_NAME = 'main.js';
     var MAIN_BUILT = path.join(BUILD_DIR, MAIN_NAME);
-    var ASSET_DIRS = ['img', 'locales', 'stylesheets'];
+    var ASSET_DIRS = ['img', 'locales'];
 
     function createCopyConfig () {
         var copyConfig = {};
@@ -22,14 +22,6 @@ module.exports = function(grunt) {
         copyConfig[path.join(BUILD_DIR, 'index.html')] = path.join(SRC_DIR, 'index.html');
 
         return copyConfig;
-    }
-
-    function createMinCssConfig () {
-        var minCssFiles = {};
-        minCssFiles[path.join(BUILD_DIR, 'stylesheets', 'screen.css')] = path.join(BUILD_DIR, 'stylesheets', 'screen.css');
-        return {
-            compress: { files: minCssFiles }
-        };
     }
 
     grunt.initConfig({
@@ -53,14 +45,29 @@ module.exports = function(grunt) {
                 dest: MAIN_BUILT
             }
         },
-        mincss: createMinCssConfig(),
         copy: {
-            assets: {
-                options: {
-                    excludeEmpty: true
-                },
+            all: {
                 files: createCopyConfig()
             }
+        },
+        compass: {
+            dev: {
+                src: path.join(SRC_DIR, 'sass'),
+                dest: path.join(SRC_DIR, 'stylesheets'),
+                linecomments: true,
+                debugsass: true
+            },
+            prod: {
+                src: path.join(SRC_DIR, 'sass'),
+                dest: path.join(BUILD_DIR, 'stylesheets'),
+                outputstyle: 'compressed',
+                linecomments: false,
+                debugsass: false
+            }
+        },
+        watch: {
+            files: [path.join(SRC_DIR, 'sass', '*.sass')],
+            tasks: ['compass:dev']
         }
     });
 
@@ -68,11 +75,14 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-mincss');
+    grunt.loadNpmTasks('grunt-compass');
 
     grunt.loadTasks('tasks');
 
     grunt.registerTask('default', 'lint');
-    grunt.registerTask('build-dev', 'lint clean requirejs copy');
-    grunt.registerTask('build-min', ['build-dev', 'min', 'mincss']);
+    grunt.registerTask('pre-build', 'lint clean requirejs copy');
+    grunt.registerTask('build-dev', 'pre-build compass:dev');
+    grunt.registerTask('build-prod', 'pre-build min compass:prod');
+    grunt.registerTask('deploy-ghpages', 'build-prod ghpages');
 
 };
