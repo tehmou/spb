@@ -3,8 +3,8 @@ requirejs.config({
         "underscore": {
             exports: "_"
         },
-        "mustache": {
-            exports: "Mustache"
+        "handlebars": {
+            exports: "Handlebars"
         },
         "jquery": {
             exports: "$"
@@ -20,7 +20,7 @@ requirejs.config({
     },
     paths: {
         "underscore": "lib/underscore",
-        "mustache": "lib/mustache",
+        "handlebars": "lib/handlebars",
         "jquery": "lib/jquery-1.8.3.min",
         "backbone": "lib/backbone",
         "backbone.layoutmanager": "lib/backbone.layoutmanager",
