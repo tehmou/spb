@@ -29,7 +29,6 @@ You may want to check [BBB](https://github.com/backbone-boilerplate/grunt-bbb) f
 
 ## Limitations
 
-* SASS styles are not compiled when building the project
 * No test runner yet
 * No locale library
 * No sample project
